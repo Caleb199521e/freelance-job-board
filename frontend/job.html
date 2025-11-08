@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details - LinkUP</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="images/logo.png" alt="LinkUP Logo" class="h-12 w-auto">
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-4" id="navAuth">
+                    <!-- Will be populated by auth.js -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
+            <p class="mt-4 text-gray-600">Loading job details...</p>
+        </div>
+
+        <!-- Job Details -->
+        <div id="jobDetails" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Main Content -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Job Header -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h1 class="text-2xl font-bold text-gray-900" id="jobTitle">Job Title</h1>
+                                <div class="flex items-center space-x-4 mt-2 text-sm text-gray-600">
+                                    <span class="flex items-center">
+                                        <i class="fas fa-building mr-1"></i>
+                                        <span id="companyName">Company Name</span>
+                                    </span>
+                                    <span class="flex items-center">
+                                        <i class="fas fa-map-marker-alt mr-1"></i>
+                                        <span id="jobLocation">Location</span>
+                                    </span>
+                                    <span class="flex items-center">
+                                        <i class="fas fa-clock mr-1"></i>
+                                        <span id="postedDate">Posted date</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-emerald-600" id="jobBudget">GHS 0</div>
+                                <div class="text-sm text-gray-500" id="budgetType">Fixed Price</div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <span class="bg-emerald-100 text-emerald-800 text-sm px-3 py-1 rounded-full" id="jobCategory">
+                                Category
+                            </span>
+                            <span class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full" id="jobStatus">
+                                Status
+                            </span>
+                            <span class="bg-purple-100 text-purple-800 text-sm px-3 py-1 rounded-full">
+                                <i class="fas fa-users mr-1"></i>
+                                <span id="proposalCount">0</span> proposals
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Job Description -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h2 class="text-xl font-semibold mb-4">Job Description</h2>
+                        <div class="prose max-w-none text-gray-700" id="jobDescription">
+                            Job description will appear here...
+                        </div>
+                    </div>
+
+                    <!-- Skills Required -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h2 class="text-xl font-semibold mb-4">Skills Required</h2>
+                        <div class="flex flex-wrap gap-2" id="skillsList">
+                            <!-- Skills will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Apply Card -->
+                    <div id="applyCard" class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold mb-4">Apply for this Job</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Your Bid (GHS)</label>
+                                <input type="number" id="bidAmount" 
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                       placeholder="Enter your bid amount">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Estimated Time</label>
+                                <input type="text" id="estimatedTime" 
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                       placeholder="e.g., 2 weeks, 1 month">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Cover Letter *</label>
+                                <textarea id="coverLetter" rows="4" required
+                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                          placeholder="Describe why you're the perfect fit for this job..."></textarea>
+                            </div>
+                            
+                            <button id="applyButton" 
+                                    class="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 transition duration-200 font-semibold">
+                                Submit Proposal
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Client Info -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold mb-4">About the Client</h3>
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                                <span class="text-emerald-600 font-semibold" id="clientInitials">C</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900" id="clientName">Client Name</h4>
+                                <p class="text-sm text-gray-600" id="memberSince">Member since</p>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-600 space-y-1">
+                            <div class="flex items-center">
+                                <i class="fas fa-briefcase mr-2 w-4"></i>
+                                <span id="clientJobs">0 jobs posted</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-star mr-2 w-4"></i>
+                                <span>100% completion rate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Job Info -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold mb-4">Job Information</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Category:</span>
+                                <span class="font-medium" id="infoCategory">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Location:</span>
+                                <span class="font-medium" id="infoLocation">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Budget Type:</span>
+                                <span class="font-medium" id="infoBudgetType">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Deadline:</span>
+                                <span class="font-medium" id="infoDeadline">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Proposals:</span>
+                                <span class="font-medium" id="infoProposals">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Already Applied State -->
+        <div id="alreadyApplied" class="hidden">
+            <div class="bg-white rounded-xl shadow-sm p-8 text-center">
+                <i class="fas fa-check-circle text-4xl text-emerald-600 mb-4"></i>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Proposal Submitted!</h2>
+                <p class="text-gray-600 mb-6">You have already applied to this job. The client will review your proposal soon.</p>
+                <a href="dashboard.html" class="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition duration-200 font-semibold">
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>`r`n    <script src="js/toast.js"></script>`r`n    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>`r`n    <script src="js/websocket.js"></script>
+    <script src="js/job.js"></script>
+</body>
+</html>
