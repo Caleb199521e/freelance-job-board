@@ -41,12 +41,23 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log('Login attempt for email:', email);
+
     const user = await User.findOne({ email });
-    if (!user || !(await user.correctPassword(password, user.password))) {
+    if (!user) {
+      console.log('User not found:', email);
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    const isPasswordValid = await user.correctPassword(password, user.password);
+    if (!isPasswordValid) {
+      console.log('Invalid password for user:', email);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+
+    console.log('Login successful for user:', email);
 
     res.json({
       token,
@@ -60,6 +71,7 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });

@@ -204,7 +204,14 @@ function displayProposals(proposals) {
                                 </span>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-gray-900">${proposal.freelancer?.name || 'Anonymous'}</h4>
+                                <div class="flex items-center space-x-2">
+                                    <h4 class="font-semibold text-gray-900">${proposal.freelancer?.name || 'Anonymous'}</h4>
+                                    <a href="freelancer-profile.html?id=${proposal.freelancer?._id}" 
+                                       class="text-xs text-emerald-600 hover:text-emerald-700"
+                                       title="View full profile">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </div>
                                 <p class="text-xs text-gray-500">
                                     ${proposal.freelancer?.profile?.title || 'Freelancer'}
                                 </p>
@@ -218,6 +225,62 @@ function displayProposals(proposals) {
                     <div class="bg-gray-50 rounded-lg p-3 mb-3">
                         <p class="text-sm text-gray-700">${proposal.coverLetter || 'No cover letter provided'}</p>
                     </div>
+                    
+                    ${proposal.freelancer?.profile?.contact && (
+                        proposal.freelancer.profile.contact.phone || 
+                        proposal.freelancer.profile.contact.linkedin || 
+                        proposal.freelancer.profile.contact.github || 
+                        proposal.freelancer.profile.contact.twitter || 
+                        proposal.freelancer.profile.contact.website
+                    ) ? `
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+                            <h5 class="text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-address-card mr-1 text-blue-600"></i>Contact Information
+                            </h5>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${proposal.freelancer.profile.contact.phone ? `
+                                    <a href="tel:${proposal.freelancer.profile.contact.phone}" 
+                                       class="text-xs text-gray-600 hover:text-emerald-600 flex items-center">
+                                        <i class="fas fa-phone text-emerald-600 mr-2 w-4"></i>
+                                        ${proposal.freelancer.profile.contact.phone}
+                                    </a>
+                                ` : ''}
+                                ${proposal.freelancer.profile.contact.linkedin ? `
+                                    <a href="${proposal.freelancer.profile.contact.linkedin}" 
+                                       target="_blank"
+                                       class="text-xs text-gray-600 hover:text-blue-600 flex items-center">
+                                        <i class="fab fa-linkedin text-blue-600 mr-2 w-4"></i>
+                                        LinkedIn
+                                    </a>
+                                ` : ''}
+                                ${proposal.freelancer.profile.contact.github ? `
+                                    <a href="${proposal.freelancer.profile.contact.github}" 
+                                       target="_blank"
+                                       class="text-xs text-gray-600 hover:text-gray-800 flex items-center">
+                                        <i class="fab fa-github text-gray-800 mr-2 w-4"></i>
+                                        GitHub
+                                    </a>
+                                ` : ''}
+                                ${proposal.freelancer.profile.contact.twitter ? `
+                                    <a href="${proposal.freelancer.profile.contact.twitter}" 
+                                       target="_blank"
+                                       class="text-xs text-gray-600 hover:text-blue-400 flex items-center">
+                                        <i class="fab fa-twitter text-blue-400 mr-2 w-4"></i>
+                                        Twitter
+                                    </a>
+                                ` : ''}
+                                ${proposal.freelancer.profile.contact.website ? `
+                                    <a href="${proposal.freelancer.profile.contact.website}" 
+                                       target="_blank"
+                                       class="text-xs text-gray-600 hover:text-emerald-600 flex items-center">
+                                        <i class="fas fa-globe text-emerald-600 mr-2 w-4"></i>
+                                        Website
+                                    </a>
+                                ` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
                     <div class="flex items-center justify-between">
                         <span class="text-xs text-gray-500">
                             <i class="fas fa-clock mr-1"></i>

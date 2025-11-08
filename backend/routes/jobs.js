@@ -3,6 +3,8 @@ import Job from '../models/Job.js';
 import User from '../models/User.js';
 import auth from '../middleware/auth.js';
 import jwt from 'jsonwebtoken';
+import SkillMatcher from '../utils/skillMatcher.js';
+import NotificationService from '../utils/notificationService.js';
 
 const router = express.Router();
 
@@ -25,6 +27,71 @@ router.get('/stats', async (req, res) => {
   } catch (error) {
     console.error('Get stats error:', error);
     res.status(500).json({ message: 'Error fetching statistics' });
+  }
+});
+
+// @route   GET /api/jobs/matched
+// @desc    Get jobs matched to freelancer's skills
+// @access  Private (Freelancers only)
+router.get('/matched', auth, async (req, res) => {
+  try {
+    // Only freelancers can access matched jobs
+    if (req.user.role !== 'freelancer') {
+      return res.status(403).json({ message: 'Only freelancers can access matched jobs' });
+    }
+
+    const { minScore = 50, page = 1, limit = 10 } = req.query;
+
+    // Get freelancer's skills
+    const freelancer = await User.findById(req.user._id).select('profile.skills');
+    const freelancerSkills = freelancer?.profile?.skills || [];
+
+    if (freelancerSkills.length === 0) {
+      return res.json({
+        jobs: [],
+        message: 'Please add skills to your profile to see matched jobs',
+        pagination: { currentPage: 1, totalPages: 0, totalJobs: 0 }
+      });
+    }
+
+    // Get all open jobs
+    const allJobs = await Job.find({ status: 'open' })
+      .populate('client', 'name profile company')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Filter and score jobs based on skill match
+    const matchedJobs = SkillMatcher.filterMatchingJobs(
+      allJobs,
+      freelancerSkills,
+      parseInt(minScore)
+    );
+
+    // Pagination
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
+    const paginatedJobs = matchedJobs.slice(skip, skip + limitNum);
+
+    // Add match quality labels
+    const jobsWithLabels = paginatedJobs.map(job => ({
+      ...job,
+      matchQuality: SkillMatcher.getMatchQuality(job.matchScore)
+    }));
+
+    res.json({
+      jobs: jobsWithLabels,
+      pagination: {
+        currentPage: pageNum,
+        totalPages: Math.ceil(matchedJobs.length / limitNum),
+        totalJobs: matchedJobs.length,
+        hasNext: pageNum < Math.ceil(matchedJobs.length / limitNum),
+        hasPrev: pageNum > 1
+      }
+    });
+  } catch (error) {
+    console.error('Get matched jobs error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -204,6 +271,11 @@ router.post('/', auth, async (req, res) => {
 
     await job.save();
     await job.populate('client', 'name profile company');
+
+    // Notify freelancers whose skills match the job requirements (minimum 50% match)
+    if (job.skillsRequired && job.skillsRequired.length > 0) {
+      await NotificationService.notifyMatchingFreelancers(job, 50);
+    }
 
     res.status(201).json({
       message: 'Job posted successfully!',

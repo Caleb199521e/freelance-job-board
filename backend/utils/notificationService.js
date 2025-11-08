@@ -1,4 +1,6 @@
 import Notification from '../models/Notification.js';
+import User from '../models/User.js';
+import SkillMatcher from './skillMatcher.js';
 
 // Utility class for creating different types of notifications
 class NotificationService {
@@ -85,34 +87,65 @@ class NotificationService {
     });
   }
 
-  // Bulk notify freelancers about new job
-  static async notifyMatchingFreelancers(job, freelancerIds) {
-    const notifications = freelancerIds.map(freelancerId => ({
-      recipient: freelancerId,
-      type: 'job_posted',
-      title: 'New Job Matches Your Skills',
-      message: `Check out: "${job.title}"`,
-      icon: 'fas fa-briefcase',
-      color: 'emerald',
-      link: `/job.html?id=${job._id}`,
-      data: { jobId: job._id }
-    }));
+  // Bulk notify freelancers about new job (skill-matched only)
+  static async notifyMatchingFreelancers(job, minMatchScore = 50) {
+    try {
+      // Get all active freelancers with skills
+      const freelancers = await User.find({
+        role: 'freelancer',
+        'profile.skills': { $exists: true, $ne: [] }
+      }).select('_id profile.skills');
 
-    await Notification.insertMany(notifications);
+      // Find freelancers that match the job requirements
+      const matchedFreelancers = SkillMatcher.findMatchingFreelancers(
+        freelancers,
+        job.skillsRequired || [],
+        minMatchScore
+      );
 
-    // Emit to all matched freelancers via WebSocket
-    if (global.io) {
-      freelancerIds.forEach(freelancerId => {
-        global.io.to(freelancerId.toString()).emit('notification', {
-          type: 'job_posted',
-          title: 'New Job Matches Your Skills',
-          message: `Check out: "${job.title}"`,
-          jobId: job._id
+      if (matchedFreelancers.length === 0) {
+        console.log(`No freelancers matched for job: ${job.title}`);
+        return [];
+      }
+
+      console.log(`Notifying ${matchedFreelancers.length} matched freelancers for job: ${job.title}`);
+
+      // Create notifications for matched freelancers
+      const notifications = matchedFreelancers.map(freelancer => ({
+        recipient: freelancer._id,
+        type: 'job_posted',
+        title: `New Job (${freelancer.matchScore}% Match)`,
+        message: `"${job.title}" matches your skills!`,
+        icon: 'fas fa-briefcase',
+        color: 'emerald',
+        link: `/job.html?id=${job._id}`,
+        data: { 
+          jobId: job._id,
+          matchScore: freelancer.matchScore,
+          matchedSkills: freelancer.matchedSkills
+        }
+      }));
+
+      await Notification.insertMany(notifications);
+
+      // Emit to all matched freelancers via WebSocket
+      if (global.io) {
+        matchedFreelancers.forEach(freelancer => {
+          global.io.to(freelancer._id.toString()).emit('notification', {
+            type: 'job_posted',
+            title: `New Job (${freelancer.matchScore}% Match)`,
+            message: `"${job.title}" matches your skills!`,
+            jobId: job._id,
+            matchScore: freelancer.matchScore
+          });
         });
-      });
-    }
+      }
 
-    return notifications;
+      return notifications;
+    } catch (error) {
+      console.error('Error notifying matching freelancers:', error);
+      return [];
+    }
   }
 }
 

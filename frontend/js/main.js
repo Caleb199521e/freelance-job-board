@@ -44,6 +44,22 @@ class API {
             const data = await response.json();
 
             if (!response.ok) {
+                // Handle authentication errors
+                if (response.status === 401) {
+                    // Token is invalid or expired
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    
+                    // Only redirect if not already on login/signup page
+                    if (!window.location.href.includes('login.html') && 
+                        !window.location.href.includes('signup.html') &&
+                        !window.location.href.includes('index.html')) {
+                        showToast('Session expired. Please log in again.', 'warning');
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 1500);
+                    }
+                }
                 throw new Error(data.message || 'API request failed');
             }
 

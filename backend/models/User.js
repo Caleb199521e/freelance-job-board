@@ -29,7 +29,14 @@ const userSchema = new mongoose.Schema({
     skills: [String],
     location: String,
     portfolio: String,
-    avatar: String
+    avatar: String,
+    contact: {
+      phone: String,
+      linkedin: String,
+      github: String,
+      twitter: String,
+      website: String
+    }
   },
   company: {
     name: String,
