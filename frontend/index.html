@@ -29,8 +29,9 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="heroSection" class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-20">
+        <!-- Guest User Hero (Not Logged In) -->
+        <div id="guestHero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h1 class="text-4xl md:text-6xl font-bold mb-6">Find Your Next <span class="text-emerald-200">Freelance</span> Opportunity</h1>
                 <p class="text-xl md:text-2xl mb-8 text-emerald-100">Connect Ghana's top talent with innovative businesses</p>
@@ -40,6 +41,38 @@
                     </a>
                     <a href="signup.html?role=client" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-emerald-600 transition duration-200">
                         <i class="fas fa-briefcase mr-2"></i>Hire Talent
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Freelancer Hero (Logged In) -->
+        <div id="freelancerHero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 hidden">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Welcome Back, <span id="freelancerName" class="text-emerald-200"></span>!</h1>
+                <p class="text-xl md:text-2xl mb-8 text-emerald-100">Ready to find your next opportunity?</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="dashboard.html" class="bg-white text-emerald-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition duration-200">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Go to Dashboard
+                    </a>
+                    <a href="#jobs" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-emerald-600 transition duration-200">
+                        <i class="fas fa-search mr-2"></i>Browse Jobs
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Hero (Logged In) -->
+        <div id="clientHero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 hidden">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Welcome Back, <span id="clientName" class="text-emerald-200"></span>!</h1>
+                <p class="text-xl md:text-2xl mb-8 text-emerald-100">Find the perfect talent for your next project</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="post-job.html" class="bg-white text-emerald-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition duration-200">
+                        <i class="fas fa-plus-circle mr-2"></i>Post a New Job
+                    </a>
+                    <a href="dashboard.html" class="bg-emerald-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-emerald-600 transition duration-200 border-2 border-emerald-400">
+                        <i class="fas fa-tachometer-alt mr-2"></i>View My Jobs
                     </a>
                 </div>
             </div>
@@ -66,8 +99,8 @@
         </div>
     </section>
 
-    <!-- Job Listings -->
-    <section id="jobs" class="py-16 bg-gray-50">
+    <!-- Job Listings (Only for Guests and Freelancers) -->
+    <section id="jobsSection" class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center mb-8">
                 <h2 class="text-3xl font-bold text-gray-900">Latest Job Opportunities</h2>
@@ -200,5 +233,32 @@
     <script src="js/toast.js"></script>`r`n    <script src="js/config.js"></script>
     <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
+    <script>
+        // Handle hero section based on user authentication
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = Auth.getUser();
+            
+            if (user) {
+                // User is logged in - show personalized hero
+                document.getElementById('guestHero').classList.add('hidden');
+                
+                if (user.role === 'freelancer') {
+                    document.getElementById('freelancerHero').classList.remove('hidden');
+                    document.getElementById('freelancerName').textContent = user.name.split(' ')[0];
+                    // Show jobs section for freelancers
+                    document.getElementById('jobsSection').classList.remove('hidden');
+                } else if (user.role === 'client') {
+                    document.getElementById('clientHero').classList.remove('hidden');
+                    document.getElementById('clientName').textContent = user.name.split(' ')[0];
+                    // Hide jobs section for clients
+                    document.getElementById('jobsSection').classList.add('hidden');
+                }
+            } else {
+                // User is not logged in - show guest hero and jobs
+                document.getElementById('guestHero').classList.remove('hidden');
+                document.getElementById('jobsSection').classList.remove('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
