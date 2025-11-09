@@ -17,20 +17,26 @@ class Database {
    */
   async connect() {
     try {
-      // MongoDB connection options
+      // MongoDB connection options optimized for Atlas
       const options = {
         maxPoolSize: 10, // Maintain up to 10 socket connections
-        serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+        serverSelectionTimeoutMS: 10000, // Increased timeout for cloud connection
         socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
         family: 4, // Use IPv4, skip trying IPv6
-        retryWrites: true,
-        w: 'majority'
       };
 
       // Get MongoDB URI from environment or use default
       const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/freelance-job-board';
       
       console.log('🔌 Attempting MongoDB connection...');
+      
+      // Check if using Atlas (cloud)
+      const isAtlas = MONGODB_URI.includes('mongodb+srv://');
+      if (isAtlas) {
+        console.log('🌐 Connecting to MongoDB Atlas (Cloud)...');
+      } else {
+        console.log('💻 Connecting to Local MongoDB...');
+      }
       
       // Connect to MongoDB
       this.connection = await mongoose.connect(MONGODB_URI, options);
@@ -39,7 +45,9 @@ class Database {
       console.log('✅ MongoDB connected successfully!');
       console.log(`📊 Database: ${this.connection.connection.db.databaseName}`);
       console.log(`🎯 Host: ${this.connection.connection.host}`);
-      console.log(`🔗 Port: ${this.connection.connection.port}`);
+      if (!isAtlas) {
+        console.log(`🔗 Port: ${this.connection.connection.port}`);
+      }
       
       this.setupEventHandlers();
       

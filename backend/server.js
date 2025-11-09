@@ -4,6 +4,15 @@ import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import jwt from 'jsonwebtoken';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+// Get current file's directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load environment variables from root .env file
+dotenv.config({ path: join(__dirname, '..', '.env') });
 
 // Import database and routes
 import database from './config/database.js';
@@ -12,9 +21,6 @@ import jobRoutes from './routes/jobs.js';
 import proposalRoutes from './routes/proposals.js';
 import userRoutes from './routes/users.js';
 import notificationRoutes from './routes/notifications.js';
-
-// Load environment variables
-dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
@@ -290,11 +296,7 @@ async function startServer() {
 }
 
 // Start the server if this file is run directly
-// Use fileURLToPath to compare the current module file path with process.argv[1]
-// This is more reliable across platforms (Windows paths vs file:// URLs)
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
+// __filename and __dirname are already defined at the top of the file
 if (process.argv[1] && __filename === process.argv[1]) {
   startServer();
 }

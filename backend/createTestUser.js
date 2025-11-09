@@ -1,11 +1,46 @@
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+// Get current file's directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load environment variables from root .env
+dotenv.config({ path: join(__dirname, '..', '.env') });
+
 import mongoose from 'mongoose';
 import User from './models/User.js';
 
 const createTestUsers = async () => {
   try {
+    // Get MongoDB URI from environment
+    const MONGODB_URI = process.env.MONGODB_URI;
+    
+    if (!MONGODB_URI) {
+      console.error('❌ MONGODB_URI not found in environment variables');
+      console.error('Please check your .env file');
+      process.exit(1);
+    }
+
+    // Hide password in logs
+    const maskedURI = MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//$1:****@');
+    
+    console.log('🔌 Connecting to MongoDB...');
+    console.log('📍 URI:', maskedURI);
+    
+    // Check if using Atlas
+    const isAtlas = MONGODB_URI.includes('mongodb+srv://');
+    if (isAtlas) {
+      console.log('🌐 Using MongoDB Atlas (Cloud)');
+    } else {
+      console.log('💻 Using Local MongoDB');
+    }
+
     // Connect to MongoDB
-    await mongoose.connect('mongodb://localhost:27017/freelance-job-board');
-    console.log('✅ Connected to MongoDB');
+    await mongoose.connect(MONGODB_URI);
+    console.log('✅ Connected to MongoDB successfully');
+    console.log(`📊 Database: ${mongoose.connection.db.databaseName}`);
 
     // Check if test users already exist
     const existingFreelancer = await User.findOne({ email: 'freelancer@test.com' });
@@ -68,10 +103,18 @@ const createTestUsers = async () => {
       console.log(`   ${index + 1}. ${user.name} (${user.email}) - ${user.role}`);
     });
 
+    console.log('\n🎉 Setup complete!');
+    console.log('\nTest Accounts:');
+    console.log('  📧 Freelancer: freelancer@test.com / password123');
+    console.log('  📧 Client: client@test.com / password123');
+    
     await mongoose.connection.close();
-    console.log('\n✅ Done! You can now login with these credentials.');
+    console.log('\n👋 Disconnected from MongoDB');
+    process.exit(0);
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error('❌ Error:', error.message);
+    console.error('Full error:', error);
+    await mongoose.connection.close();
     process.exit(1);
   }
 };
