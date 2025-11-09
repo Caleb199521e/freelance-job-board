@@ -280,3 +280,4 @@ class AuthManager {
 document.addEventListener('DOMContentLoaded', () => {
     AuthManager.setupNavbar();
 });
+

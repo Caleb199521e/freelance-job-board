@@ -406,3 +406,5 @@ async function submitProposal(event) {
 document.addEventListener('DOMContentLoaded', () => {
     loadJobDetails();
 });
+
+

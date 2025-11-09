@@ -4,3 +4,5 @@
 window.API_BASE = window.__API_BASE__ || 'http://localhost:5000/api';
 // Also expose a global variable for easy access in inline scripts
 var API_BASE = window.API_BASE;
+
+

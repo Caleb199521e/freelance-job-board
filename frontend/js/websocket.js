@@ -95,3 +95,5 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('beforeunload', () => {
     WebSocketClient.disconnect();
 });
+
+

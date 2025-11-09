@@ -106,3 +106,5 @@ window.toastSystem = new Toast();
 window.showToast = (message, type = 'info', duration = 3000) => {
     window.toastSystem.show(message, type, duration);
 };
+
+
