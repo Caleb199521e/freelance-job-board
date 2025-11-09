@@ -14,15 +14,34 @@
     <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
+                <!-- Logo -->
                 <div class="flex items-center">
                     <a href="index.html" class="flex items-center space-x-2">
                         <img src="images/logo.png" alt="LinkUP Logo" class="h-12 w-auto">
                     </a>
                 </div>
                 
-                <div class="flex items-center space-x-4" id="navAuth">
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-4" id="navAuth">
                     <!-- Will be populated by auth.js -->
                 </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobileMenuBtn" type="button" class="text-gray-700 hover:text-emerald-600 focus:outline-none focus:text-emerald-600">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path id="menuIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            <path id="closeIcon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200">
+            <div id="mobileNavAuth" class="px-4 pt-2 pb-4 space-y-2">
+                <!-- Will be populated by auth.js -->
             </div>
         </div>
     </nav>
@@ -42,6 +61,7 @@
     <script src="js/toast.js"></script>
     <script src="js/config.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/mobile-menu.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/websocket.js"></script>
     <script>

@@ -37,7 +37,7 @@ class AuthManager {
     static setupNavbar() {
         const user = AuthManager.checkAuth();
         if (user) {
-            // Update navbar with user info
+            // Update desktop navbar with user info
             const navAuth = document.getElementById('navAuth');
             if (navAuth) {
                 navAuth.innerHTML = `
@@ -45,6 +45,11 @@ class AuthManager {
                         <a href="dashboard.html" class="text-gray-700 hover:text-emerald-600">
                             <i class="fas fa-tachometer-alt mr-1"></i>Dashboard
                         </a>
+                        ${user.role === 'client' ? `
+                            <a href="freelancers.html" class="text-gray-700 hover:text-emerald-600">
+                                <i class="fas fa-users mr-1"></i>Browse Freelancers
+                            </a>
+                        ` : ''}
                         <div class="relative">
                             <button id="notificationButton" class="relative text-gray-700 hover:text-emerald-600 p-2">
                                 <i class="fas fa-bell text-xl"></i>
@@ -82,6 +87,38 @@ class AuthManager {
                         </div>
                     </div>
                 `;
+                
+                // Update mobile navbar with user info
+                const mobileNavAuth = document.getElementById('mobileNavAuth');
+                if (mobileNavAuth) {
+                    mobileNavAuth.innerHTML = `
+                        <div class="flex items-center space-x-3 px-3 py-3 border-b border-gray-200">
+                            <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                                <span class="text-emerald-600 font-semibold">
+                                    ${user.name.charAt(0).toUpperCase()}
+                                </span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">${user.name}</p>
+                                <p class="text-xs text-gray-500">${user.email}</p>
+                            </div>
+                        </div>
+                        <a href="dashboard.html" class="block text-gray-700 hover:text-emerald-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium transition duration-200">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        ${user.role === 'client' ? `
+                            <a href="freelancers.html" class="block text-gray-700 hover:text-emerald-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium transition duration-200">
+                                <i class="fas fa-users mr-2"></i>Browse Freelancers
+                            </a>
+                        ` : ''}
+                        <a href="profile.html" class="block text-gray-700 hover:text-emerald-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium transition duration-200">
+                            <i class="fas fa-user mr-2"></i>Profile
+                        </a>
+                        <button onclick="AuthManager.logout()" class="w-full text-left text-gray-700 hover:text-emerald-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium transition duration-200">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    `;
+                }
                 
                 // Add click event listener to toggle user dropdown
                 const menuButton = document.getElementById('userMenuButton');

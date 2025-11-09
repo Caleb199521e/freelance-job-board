@@ -76,4 +76,33 @@ router.post('/login', async (req, res) => {
   }
 });
 
+
+
+// Get all freelancers (public route)
+router.get('/freelancers', async (req, res) => {
+  try {
+    const freelancers = await User.find({ role: 'freelancer' })
+      .select('-password')
+      .sort({ createdAt: -1 });
+    res.json(freelancers);
+  } catch (error) {
+    console.error('Error fetching freelancers:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+
+// Get all freelancers (public route)
+router.get('/freelancers', async (req, res) => {
+  try {
+    const freelancers = await User.find({ role: 'freelancer' })
+      .select('-password')
+      .sort({ createdAt: -1 });
+    res.json(freelancers);
+  } catch (error) {
+    console.error('Error fetching freelancers:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
 export default router;
+
