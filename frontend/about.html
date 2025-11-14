@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - LinkUP</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="images/logo.png" alt="LinkUP Logo" class="h-12 w-auto">
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div id="navAuth" class="hidden md:flex items-center space-x-4">
+                    <a href="login.html" class="text-gray-700 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition duration-200">Login</a>
+                    <a href="signup.html" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition duration-200 font-medium">Sign Up</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobileMenuBtn" type="button" class="text-gray-700 hover:text-emerald-600 focus:outline-none focus:text-emerald-600">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path id="menuIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            <path id="closeIcon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200">
+            <div id="mobileNavAuth" class="px-4 pt-2 pb-4 space-y-2">
+                <a href="login.html" class="block text-gray-700 hover:text-emerald-600 hover:bg-gray-50 px-3 py-2 rounded-md text-base font-medium transition duration-200">Login</a>
+                <a href="signup.html" class="block text-center bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition duration-200 font-medium">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">About LinkUP</h1>
+            <p class="text-xl md:text-2xl text-emerald-50 max-w-3xl mx-auto">
+                Connecting talented freelancers with clients worldwide
+            </p>
+        </div>
+    </section>
+
+    <!-- About Content -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Mission Section -->
+            <div class="mb-16">
+                <div class="max-w-4xl mx-auto text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
+                    <p class="text-lg text-gray-600 leading-relaxed">
+                        LinkUP is dedicated to creating meaningful connections between talented freelancers and businesses seeking top-tier expertise. We believe in empowering professionals to work on their own terms while helping companies access the best talent globally.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Values Section -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">Our Values</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Value 1 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-6 mx-auto">
+                            <i class="fas fa-handshake text-3xl text-emerald-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Trust & Transparency</h3>
+                        <p class="text-gray-600 text-center">
+                            We foster honest relationships between freelancers and clients through transparent communication and fair practices.
+                        </p>
+                    </div>
+
+                    <!-- Value 2 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-6 mx-auto">
+                            <i class="fas fa-rocket text-3xl text-emerald-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Innovation</h3>
+                        <p class="text-gray-600 text-center">
+                            We continuously improve our platform to provide the best tools and features for our community.
+                        </p>
+                    </div>
+
+                    <!-- Value 3 -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-6 mx-auto">
+                            <i class="fas fa-users text-3xl text-emerald-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Community</h3>
+                        <p class="text-gray-600 text-center">
+                            We build a supportive ecosystem where freelancers and clients can grow together and achieve success.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-12 mb-16">
+                <div class="grid md:grid-cols-3 gap-8 text-center text-white">
+                    <div>
+                        <div class="text-4xl font-bold mb-2">1000+</div>
+                        <div class="text-emerald-100">Active Freelancers</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold mb-2">500+</div>
+                        <div class="text-emerald-100">Satisfied Clients</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold mb-2">2000+</div>
+                        <div class="text-emerald-100">Projects Completed</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Story Section -->
+            <div class="max-w-4xl mx-auto mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 text-center mb-8">Our Story</h2>
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <p class="text-gray-600 leading-relaxed mb-4">
+                        LinkUP was founded with a simple yet powerful vision: to break down barriers in the freelance marketplace and create opportunities for talented professionals worldwide.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed mb-4">
+                        We recognized that traditional job markets often limit opportunities based on geography, rigid employment structures, and inefficient hiring processes. LinkUP was created to change that.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        Today, we're proud to serve a growing community of freelancers and clients who trust our platform to find meaningful work and exceptional talent. Our commitment remains the same: to provide a seamless, secure, and rewarding experience for everyone in our ecosystem.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6">Ready to Join LinkUP?</h2>
+                <p class="text-lg text-gray-600 mb-8">
+                    Whether you're a freelancer looking for your next opportunity or a client seeking top talent, we're here to help.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="signup.html?role=freelancer" class="bg-emerald-600 text-white px-8 py-3 rounded-lg hover:bg-emerald-700 transition duration-200 font-medium">
+                        Join as Freelancer
+                    </a>
+                    <a href="signup.html?role=client" class="bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 transition duration-200 font-medium">
+                        Hire Talent
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="images/logo.png" alt="LinkUP Logo" class="h-12 w-auto">
+                    </div>
+                    <p class="text-gray-400">Connecting Ghanaian talent with global opportunities.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">For Freelancers</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Find Work</a></li>
+                        <li><a href="#" class="hover:text-white transition">Create Profile</a></li>
+                        <li><a href="#" class="hover:text-white transition">Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">For Clients</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Post a Job</a></li>
+                        <li><a href="#" class="hover:text-white transition">Find Talent</a></li>
+                        <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/about.html" class="hover:text-white transition">About</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 LinkUP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/toast.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/mobile-menu.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
